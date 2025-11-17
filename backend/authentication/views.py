@@ -7,9 +7,8 @@ from .serializers import (
     PasswordResetRequestSerializer, PasswordResetConfirmSerializer)
 from .service.passwordResetService import PasswordResetService
 from .service.userService import UserService
-from backend.utils.token_utils import get_tokens_for_user, blacklist_token
+from backend.utils.token_utils import get_tokens_for_user, blacklist_token, refresh_token_for_user
 from rest_framework.permissions import IsAuthenticated, AllowAny
-
 
 class UserRegistrationView(GenericAPIView):
     """
@@ -169,4 +168,32 @@ class PasswordResetView(GenericAPIView):
             return Response({
                 "success": False,
                 "message": str(ve)
+            }, status=status.HTTP_400_BAD_REQUEST)
+            
+            
+def RefreshTokenView(GenericAPIView):
+    """
+    API view to refresh JWT tokens
+    """
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        refresh_token = request.data.get('refresh')
+        if not refresh_token:
+            return Response({
+                "success": False,
+                "message": "Refresh token is required."
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        new_tokens = refresh_token_for_user(refresh_token)
+        if new_tokens:
+            return Response({
+                "success": True,
+                "message": "Token refreshed successfully.",
+                "tokens": new_tokens
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response({
+                "success": False,
+                "message": "Invalid or expired refresh token."
             }, status=status.HTTP_400_BAD_REQUEST)

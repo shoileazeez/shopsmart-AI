@@ -32,3 +32,24 @@ def blacklist_token(refresh_token):
         return True
     except Exception:
         return False
+    
+def refresh_token_for_user(refresh_token):
+    """
+    Refresh access token using a refresh token
+    
+    Args:
+        refresh_token: The refresh token to use for refreshing
+        
+    Returns:
+        dict: Dictionary containing new access and refresh tokens
+    """
+    try:
+        token = RefreshToken(refresh_token)
+        new_access_token = str(token.access_token)
+        new_refresh_token = str(token)
+        return {
+            'refresh': new_refresh_token,
+            'access': new_access_token,
+        }
+    except Exception:
+        return None

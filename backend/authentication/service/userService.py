@@ -16,3 +16,7 @@ class UserService:
     @staticmethod
     def delete_user(email: str, id: int):
         return UserRepository.delete_user_by_email_and_id(email, id)
+    
+    @staticmethod
+    def get_user_by_id(id: int):
+        return UserRepository.get_user_by_id(id)

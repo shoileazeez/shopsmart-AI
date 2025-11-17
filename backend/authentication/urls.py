@@ -6,6 +6,7 @@ from .views import (
     PasswordResetRequestView,
     ResendPasswordResetCodeView,
     PasswordResetView,
+    RefreshTokenView
 )
 
 urlpatterns = [
@@ -15,4 +16,5 @@ urlpatterns = [
     path("password-reset/", PasswordResetRequestView.as_view(), name="password_reset"),
     path("password-reset/resend/", ResendPasswordResetCodeView.as_view(), name="resend_password_reset_code"),
     path("password-reset/confirm/", PasswordResetView.as_view(), name="password_reset_confirm"),
+    path("token/refresh/", RefreshTokenView, name="token_refresh"),
 ]
